@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-04-05T15:21:34 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteVentasCliente" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4d24cc60-3e7d-4bca-8a71-0304dc035c2f">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SakilaAdapter"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="633"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="353"/>
+	<parameter name="codigo_cliente" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT f.title,p.amount,r.rental_date,r.return_date,ca.name 
+from rental r,payment p, inventory i,film f,category ca,film_category fc 
+WHERE p.rental_id= r.rental_id AND r.inventory_id = i.inventory_id 
+AND i.film_id = f.film_id AND fc.film_id = f.film_id 
+AND fc.category_id = ca.category_id 
+AND r.customer_id = $P{codigo_cliente} ORDER BY ca.name]]>
+	</queryString>
+	<field name="title" class="java.lang.String">
+		<fieldDescription><![CDATA[Título de la pelicula rentada]]></fieldDescription>
+	</field>
+	<field name="amount" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[Monto pagado]]></fieldDescription>
+	</field>
+	<field name="rental_date" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[Fecha y hora de la renta]]></fieldDescription>
+	</field>
+	<field name="return_date" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[Fecha y hora de retorno de la pelicula.]]></fieldDescription>
+	</field>
+	<field name="name" class="java.lang.String">
+		<fieldDescription><![CDATA[Nombre de la categoría de la película]]></fieldDescription>
+	</field>
+	<variable name="suma_montos_grupo" class="java.math.BigDecimal" resetType="Group" resetGroup="GroupCategoria" calculation="Sum">
+		<variableExpression><![CDATA[$F{amount}]]></variableExpression>
+	</variable>
+	<variable name="suma_montos_total" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{amount}]]></variableExpression>
+	</variable>
+	<group name="GroupCategoria">
+		<groupExpression><![CDATA[$F{name}]]></groupExpression>
+		<groupHeader>
+			<band height="35">
+				<textField>
+					<reportElement x="0" y="0" width="280" height="30" uuid="809671d6-bd7f-4810-a9c1-09259740af9d"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="14" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["CATEGORÍA:"+$F{name}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="32">
+				<textField>
+					<reportElement x="280" y="5" width="270" height="23" uuid="d0eb1c70-1d52-4928-ae67-bb25de3c3299"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["TOTAL DE LA CATEGORÍA:"+$V{suma_montos_grupo}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="-20" y="0" width="595" height="79" forecolor="#FFFFFF" backcolor="#518CB5" uuid="1dc5e7b9-ea1e-4035-a8b4-2438e04d7252"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="29"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE VENTAS DEL CLIENTE]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="54" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="10" width="100" height="30" uuid="d138e89b-9dd9-436e-88a2-14ca063a673d"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Cliente ID:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="10" width="100" height="30" uuid="aec2806e-f5e6-4dd3-a6dd-10e1e47fa94e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{codigo_cliente}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="33" splitType="Stretch">
+			<staticText>
+				<reportElement x="80" y="2" width="100" height="30" uuid="2dccc06e-d3e6-40a5-b1c8-ced6dcd33153"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[TÍTULO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="2" width="100" height="30" uuid="5a9faae4-5548-48cb-8e9d-9b494279e3bd"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[MONTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="1" width="140" height="30" uuid="c2978d7c-450c-4de0-853c-6ed017bd30b3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[FECHA RENTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="1" width="130" height="30" uuid="805aef0b-6f1b-4d75-ba9f-bf3f70447546"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[FECHA DEVOLUCIÓN]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement x="80" y="0" width="100" height="20" uuid="fdd5754a-0a2f-43f3-bc61-0875117afd19"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="0" width="100" height="20" uuid="04fc9afb-bd76-4836-92dc-88a2520bf39a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="0" width="140" height="20" uuid="5bb7f46f-bdb1-47af-a28b-fa6bb747fcf2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{rental_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="420" y="0" width="130" height="20" uuid="4a79ff54-4d2b-40db-8386-43298eee3690"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{return_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="80" height="20" uuid="f00f3c2a-ac43-4eb8-a0ea-798e6d046db2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{GroupCategoria_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="31">
+			<textField>
+				<reportElement x="365" y="0" width="135" height="30" uuid="e880cdac-a1fb-4ae6-b6e4-78a53b341a97"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+ $V{PAGE_NUMBER}+" de "]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="500" y="0" width="50" height="30" uuid="d6b0668d-d32c-49ab-93ce-94b80ff4f086"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="70" splitType="Stretch">
+			<textField>
+				<reportElement x="180" y="30" width="370" height="30" uuid="cf06f8b2-5917-43b3-b073-31eb46fac6b6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TOTAL RECAUDADO POR RENTAS DE ESTE CLIENTE: " + $V{suma_montos_total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="0" width="370" height="30" uuid="1e6af854-7e33-4182-9e30-d86eccd32ca3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TOTAL DE PELICULAS RENTADAS:"+$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-04-06T21:36:23 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteGeneral" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="06f85348-0918-47fe-b774-8c441f9af71f">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SakilaAdapter"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<queryString>
+		<![CDATA[SELECT concat(ci.city,',',co.country),a.address, count(*) numero_alquileres from rental r, inventory i,store s,country co,city ci,address a WHERE r.inventory_id = i.inventory_id AND i.store_id = s.store_id AND s.address_id = a.address_id AND a.city_id = ci.city_id AND co.country_id = ci.country_id group by s.store_id order by numero_alquileres desc]]>
+	</queryString>
+	<field name="concat(ci.city,&apos;,&apos;,co.country)" class="java.lang.String"/>
+	<field name="address" class="java.lang.String"/>
+	<field name="numero_alquileres" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="-20" y="0" width="595" height="61" forecolor="#FFFFFF" backcolor="#52B0EB" uuid="7756108d-43d9-4cb2-9ecf-d6d025d8aa6c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="22" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE GENERAL]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="31" splitType="Stretch">
+			<staticText>
+				<reportElement x="80" y="0" width="140" height="30" uuid="a488c771-2c0f-47ad-a9d1-42494acfb3e4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CIUDAD Y PAÍS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="220" y="0" width="200" height="30" uuid="665ab20d-5be6-47dd-9568-eb88a5e8073b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECCIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="0" width="100" height="30" uuid="41534b29-316c-41b6-814f-85428983f23a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nº DE ALQUILERES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="40" y="0" width="40" height="30" uuid="a27a4ed0-1af6-44e4-8c9a-6c496d009b9f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nº]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="33" splitType="Stretch">
+			<textField>
+				<reportElement x="80" y="0" width="140" height="30" uuid="d99e9072-7d4b-4e26-897d-4af7f022277a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{concat(ci.city,',',co.country)}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="220" y="0" width="200" height="30" uuid="8bd7b502-8392-4d34-8524-2431fbe4083e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="420" y="0" width="100" height="30" uuid="0d8327e9-5611-40f0-86e8-fd38cb16b318"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{numero_alquileres}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="40" y="0" width="40" height="30" uuid="29dcc982-e66c-4db9-896d-c60fca1fad7a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="76" splitType="Stretch">
+			<subreport>
+				<reportElement x="-11" y="0" width="80" height="60" uuid="9a82a174-40a0-467e-a036-17675d9cd68f"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["SubreporteCategorias.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement x="280" y="0" width="90" height="60" uuid="8c3c7927-b667-44f2-b553-31f7c40363c6"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["SubreportePeliculas.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+</jasperReport>

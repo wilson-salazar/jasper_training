@@ -1,0 +1,69 @@
+CLASE 3: ReporteSimplePeliculas.jrxml
+select title,description,rental_duration,rating,length from film
+
+CLASE 6: ReportePeliculasPorRating.jrxml
+SELECT sakila.film.title,
+	sakila.film.description,
+	sakila.film.special_features,
+	sakila.film.rating,
+	sakila.film.rental_duration
+FROM sakila.film
+
+CLASE 7: ReporteRatingConParametro.jrxml
+SELECT title,description,length,special_features FROM film WHERE rating = $P{rating_reporte}
+
+CLASE 14: TablaCruzada_PagoClientes.jrxml
+select concat(c.first_name,' ',c.last_name,' ID:',c.customer_id) nombre_completo, 
+p.amount , date_format(p.payment_date,"%b-%Y") fecha_pago 
+from customer c,payment p where p.customer_id = c.customer_id
+
+CLASE 15: ReporteNumeroTipos.jrxml
+SELECT rating,count(*) FROM film GROUP BY rating
+
+CLASE 16: ReporteCategorias.jrxml
+select c.name,sum(p.amount) , date_format(p.payment_date,"%b-%Y") fecha_alquileres
+from payment p,category c,film_category fc,rental r,inventory i where 
+p.rental_id = r.rental_id AND r.inventory_id = i.inventory_id AND i.film_id = fc.film_id AND fc.category_id = c.category_id 
+GROUP BY fecha_alquileres,name order by fecha_alquileres
+
+CLASE 17: ReporteNumeroAlquilerPorRating
+select f.rating,count(*),date_format(r.rental_date,"%b-%Y") fecha_pago 
+from rental r,inventory i,film f where r.inventory_id = i.inventory_id and i.film_id = f.film_id 
+ group by rating,fecha_pago order by rating
+
+CLASE 18.-ReporteVentasCliente.jrxml
+SELECT f.title,p.amount,r.rental_date,r.return_date,ca.name 
+from rental r,payment p, inventory i,film f,category ca,film_category fc 
+WHERE p.rental_id= r.rental_id AND r.inventory_id = i.inventory_id 
+AND i.film_id = f.film_id AND fc.film_id = f.film_id 
+AND fc.category_id = ca.category_id 
+AND r.customer_id = $P{codigo_cliente} ORDER BY ca.name
+
+
+CLASE 20 SUBREPORTES
+
+ReporteGeneral.jrxml
+
+SELECT concat(ci.city,',',co.country),a.address, count(*) numero_alquileres 
+from rental r, inventory i,store s,country co,city ci,address a 
+WHERE r.inventory_id = i.inventory_id AND i.store_id = s.store_id 
+AND s.address_id = a.address_id AND a.city_id = ci.city_id 
+AND co.country_id = ci.country_id group by s.store_id order by numero_alquileres desc
+
+
+SubreportePeliculas.jrxml
+
+SELECT f.title, count(*) numero_alquileres 
+from rental r, inventory i,film f,category ca,film_category fc 
+WHERE r.inventory_id = i.inventory_id AND i.film_id = f.film_id 
+AND fc.film_id = f.film_id AND fc.category_id = ca.category_id 
+group by title order by numero_alquileres desc LIMIT 10
+
+SubreporteCategorias.jrxml
+
+SELECT ca.name, count(*) numero_alquileres 
+from rental r, inventory i,film f,category ca,film_category fc 
+WHERE r.inventory_id = i.inventory_id AND i.film_id = f.film_id 
+AND fc.film_id = f.film_id AND fc.category_id = ca.category_id 
+group by ca.name order by numero_alquileres desc LIMIT 10
+

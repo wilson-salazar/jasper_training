@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-04-06T02:55:24 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteCategorias" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bbc65663-7b76-46fe-8a8b-23689e5bee12">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SakilaAdapter"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<queryString>
+		<![CDATA[select c.name,sum(p.amount) , date_format(p.payment_date,"%b-%Y") fecha_alquileres
+from payment p,category c,film_category fc,rental r,inventory i where 
+p.rental_id = r.rental_id AND r.inventory_id = i.inventory_id AND i.film_id = fc.film_id AND fc.category_id = c.category_id 
+GROUP BY fecha_alquileres,name order by fecha_alquileres]]>
+	</queryString>
+	<field name="name" class="java.lang.String"/>
+	<field name="sum(p.amount)" class="java.math.BigDecimal"/>
+	<field name="fecha_alquileres" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<summary>
+		<band height="312" splitType="Stretch">
+			<componentElement>
+				<reportElement x="0" y="0" width="560" height="310" uuid="6560d8e1-1cfc-4453-aec8-036ba759d29a"/>
+				<sc:spiderChart xmlns:sc="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<sc:chartSettings>
+						<chartTitle/>
+						<chartSubtitle/>
+						<chartLegend/>
+					</sc:chartSettings>
+					<sc:spiderDataset>
+						<categorySeries>
+							<seriesExpression><![CDATA[$F{fecha_alquileres}]]></seriesExpression>
+							<categoryExpression><![CDATA[$F{name}]]></categoryExpression>
+							<valueExpression><![CDATA[$F{sum(p.amount)}]]></valueExpression>
+							<labelExpression><![CDATA[$F{name}]]></labelExpression>
+						</categorySeries>
+					</sc:spiderDataset>
+					<sc:spiderPlot isWebFilled="true"/>
+				</sc:spiderChart>
+			</componentElement>
+		</band>
+	</summary>
+</jasperReport>
