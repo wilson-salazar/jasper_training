@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelo.Actor;
+import modelo.ActorDataSource;
+import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -58,10 +60,11 @@ public class ReportGenerator {
 
         try {
             ActorDAO dao = new ActorDAO();
-            List<Actor> listaActores = dao.getAllActores();
-            System.out.println("Lista de acotres en generador >>>>> " + listaActores.size());
-            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(listaActores);
+            //List<Actor> listaActores = dao.getAllActores();
+            //System.out.println("Lista de acotres en generador >>>>> " + listaActores.size());
+            //JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(listaActores);
 
+            JRDataSource dataSource = new ActorDataSource();
             JasperPrint reporteLleno = JasperFillManager.fillReport(
                     REPORTE_SIMPLE_ACTORES,
                     new HashMap<>(),
